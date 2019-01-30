@@ -23,19 +23,19 @@
         android:orientation="horizontal">
 
         <EditText
-            android:layout_margin="10dp"
-            android:id="@+id/editText3"
+            android:id="@+id/name1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:hint="성(姓)"
             android:inputType="textPersonName" />
 
         <EditText
-            android:layout_margin="10dp"
-            android:id="@+id/editText4"
+            android:id="@+id/name2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:hint="이름(성은 제외)"
             android:inputType="textPersonName" />

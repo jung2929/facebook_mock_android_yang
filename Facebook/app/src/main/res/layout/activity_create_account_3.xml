@@ -18,25 +18,26 @@
         android:textStyle="bold" />
 
     <RadioGroup
+        android:id="@+id/rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
 
         <RadioButton
-            android:layout_margin="10dp"
-            android:id="@+id/radioButton"
+            android:id="@+id/m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="                                                                                    남성" />
+            android:text="남성" />
 
         <RadioButton
-            android:layout_margin="10dp"
-            android:id="@+id/radioButton2"
+            android:id="@+id/w"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            android:text="                                                                                    여성" />
+            android:text="여성" />
     </RadioGroup>
 
     <ImageButton

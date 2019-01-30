@@ -35,14 +35,15 @@
     </LinearLayout>
 
     <EditText
-        android:textSize="30dp"
         android:id="@+id/edit_message"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@null"
         android:ems="10"
         android:hint="무슨 생각을 하고 계신가요?"
-        android:inputType="textPersonName" />
+        android:inputType="none"
+        android:scrollHorizontally="false"
+        android:textSize="30dp" />
 
 </LinearLayout>
