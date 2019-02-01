@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hojune.facebook">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,23 +11,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateAccountActivity_1" />
-        <activity android:name=".CreateAccountActivity_2" />
-        <activity android:name=".CreateAccountActivity_3" />
-        <activity android:name=".CreateAccountActivity_4" />
+        <activity android:name=".activity.CreateAccountActivityOne" />
+        <activity android:name=".activity.CreateAccountActivityTwo" />
+        <activity android:name=".activity.CreateAccountActivityThree" />
+        <activity android:name=".activity.CreateAccountActivityFour" />
         <activity
-            android:name=".CreateAccountActivity_6"
+            android:name=".activity.CreateAccountActivitySix"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity android:name=".MyProfileActivity" />
-        <activity android:name=".AddMessageBoard" />
-        <activity android:name=".CreateAccountActivity_5" />
+        <!--<activity android:name=".fragment.MyProfileFragment" />-->
+        <activity android:name=".activity.AddTimeLineActivity" />
+        <activity android:name=".activity.CreateAccountActivityFive" />
+        <!--<activity android:name=".fragment.TimeLineFragment" />-->
+        <activity android:name=".activity.MainActivity"></activity>
     </application>
 
 </manifest>
