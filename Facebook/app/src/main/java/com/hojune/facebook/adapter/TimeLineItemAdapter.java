@@ -1,6 +1,7 @@
 package com.hojune.facebook.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,9 @@ public class TimeLineItemAdapter extends BaseAdapter {
 
 
         MyTimeLineData myTimeLineData = arrayList.get(arrayList.size()-1-position);
-
         message.setText(myTimeLineData.getMessage());
+
+        Log.e("TimeLineItemAdapter", "getView");
 
         return convertView;
     }

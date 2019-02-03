@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.hojune.facebook.activity.AddTimeLineActivity;
 import com.hojune.facebook.activity.MainActivity;
 import com.hojune.facebook.adapter.TimeLineItemAdapter;
 import com.hojune.facebook.R;
+import com.hojune.facebook.adapter.ViewPagerAdapter;
 
 public class MyProfileFragment extends Fragment {
 
@@ -28,13 +30,19 @@ public class MyProfileFragment extends Fragment {
 
 //    Context context = MyProfileFragment.this;
 
+    private static MyProfileFragment fragment;
+
     public static MyProfileFragment newInstance() {
         
-        Bundle args = new Bundle();
-        
-        MyProfileFragment fragment = new MyProfileFragment();
-        fragment.setArguments(args);
+        if(fragment == null){
+            fragment = new MyProfileFragment();
+        }
+
         return fragment;
+    }
+
+    public int show(){
+        return timeLineItemAdapter.getCount();
     }
 
 
@@ -47,6 +55,7 @@ public class MyProfileFragment extends Fragment {
         name = (TextView)view.findViewById(R.id.name);
         listview =(ListView)view.findViewById(R.id.listview);
         listview.setAdapter(timeLineItemAdapter);
+        setListViewHeightBasedOnChildren(listview);
 
 
         ViewGroup think = (ViewGroup)view.findViewById(R.id.think);
@@ -62,11 +71,12 @@ public class MyProfileFragment extends Fragment {
         return view;
     }
 
-    public void UpdateAdapter(String message){
+    public void UpdateTimeLineItemAdapter(String message){
         timeLineItemAdapter.addItem(message);
         timeLineItemAdapter.notifyDataSetChanged();
+        Log.e("MyProfileFragment","UpdateTimeLineItemAdpater() 호출");
 
-        setListViewHeightBasedOnChildren(listview);
+
     }
 
     /*@Override

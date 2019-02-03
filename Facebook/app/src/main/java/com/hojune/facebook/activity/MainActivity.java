@@ -2,8 +2,8 @@ package com.hojune.facebook.activity;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,17 +17,27 @@ public class MainActivity extends AppCompatActivity {
 
     String editMessage;
     FragmentManager mFragmentManager = getSupportFragmentManager();
+    ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(mFragmentManager);
+    MyProfileFragment myProfileFragment = MyProfileFragment.newInstance();
+
+    TabLayout mTabLayout;
+    ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TabLayout mTabLayout = (TabLayout)findViewById(R.id.tabs);
-        ViewPager mViewPager = (ViewPager)findViewById(R.id.viewpager);
-
-        mViewPager.setAdapter(new ViewPagerAdapter(mFragmentManager));
+        mTabLayout = (TabLayout)findViewById(R.id.tabs);
+        mViewPager = (ViewPager)findViewById(R.id.viewpager);
+        mViewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager); //뷰페이저와 탭레이아웃 연동
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewPagerAdapter.notifyDataSetChanged();
     }
 
     public void CallAddTimeLine(){
@@ -40,11 +50,9 @@ public class MainActivity extends AppCompatActivity {
             switch(requestCode){
                 case 100:
                     editMessage = data.getExtras().getString("edit_message");
-                    Log.e("onActivityResult", editMessage);
-                    MyProfileFragment myProfileFragment = (MyProfileFragment) mFragmentManager.findFragmentById(R.id.viewpager);//프래그먼트가 쓰이는 레이아웃의 id를 쓰랬어
-                    //그럼 여기서는 viewpager가 맞겠지??
 
-                    myProfileFragment.UpdateAdapter(editMessage); //이부분이 잘 되는지는 모르겠다.. 흠흠흠
+                    myProfileFragment = (MyProfileFragment)viewPagerAdapter.getItem(0);
+                    myProfileFragment.UpdateTimeLineItemAdapter(editMessage); //이부분이 잘 되는지는 모르겠다.. 흠흠흠
             }
         }
     }

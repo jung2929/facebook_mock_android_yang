@@ -16,12 +16,11 @@ import com.hojune.facebook.activity.MainActivity;
 
 public class TimeLineFragment extends Fragment {
 
+    private static TimeLineFragment fragment;
     public static TimeLineFragment newInstance() {
-
-        Bundle args = new Bundle();
-
-        TimeLineFragment fragment = new TimeLineFragment();
-        fragment.setArguments(args);
+        if(fragment==null){
+            fragment = new TimeLineFragment();
+        }
         return fragment;
     }
 

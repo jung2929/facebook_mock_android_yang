@@ -62,7 +62,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call call, Response response) throws IOException {
                         Log.e("LoginActivity Response", "서버연결 성공");
 
-                        try {
+                        //워니 서버수정 완료하면 이 부분 활성화 시키자
+                        /*try {
                            final JSONObject jsonObject = new JSONObject(response.body().string());
 
 
@@ -79,13 +80,14 @@ public class LoginActivity extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
                                     }
-                                });
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
+                                });*/
+                        Log.e("LoginActivity Response", "새로운 페이지 시작 직전");
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
 
-                            //
-                            else{
+                    //
+                            /*else{
                                 mHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -103,20 +105,21 @@ public class LoginActivity extends AppCompatActivity {
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
-                        }
+                        }*/
+
+//
+//                    }
+//                });
+                    //내가 여기서 callback 객체를 파라미터로 넘겨주는것과 thread.sleep을 해서 하는것의 차이를 명확히 알아보자..
 
 
-                    }
+                    //바로 if문으로 넘어가니까 login.success가 true로 바뀌기도 전에 if문 실행함
+                    //그래서 1초 텀을 줬더니 내 의도대로 잘 됨.
+
+//
+//            }
+//        });
                 });
-                //내가 여기서 callback 객체를 파라미터로 넘겨주는것과 thread.sleep을 해서 하는것의 차이를 명확히 알아보자..
-
-
-
-
-                //바로 if문으로 넘어가니까 login.success가 true로 바뀌기도 전에 if문 실행함
-                //그래서 1초 텀을 줬더니 내 의도대로 잘 됨.
-
-
             }
         });
     }
