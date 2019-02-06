@@ -1,37 +1,40 @@
 package com.hojune.facebook.fragment;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hojune.facebook.activity.AddTimeLineActivity;
 import com.hojune.facebook.activity.MainActivity;
 import com.hojune.facebook.adapter.TimeLineItemAdapter;
 import com.hojune.facebook.R;
-import com.hojune.facebook.adapter.ViewPagerAdapter;
+import com.hojune.facebook.custom.SlidingAnimationListener;
 
 public class MyProfileFragment extends Fragment {
 
     ListView listview;
-    TimeLineItemAdapter timeLineItemAdapter = new TimeLineItemAdapter();
+    public TimeLineItemAdapter timeLineItemAdapter = new TimeLineItemAdapter();
     TextView name;
+
+    Animation translateTop;
+    Animation translateBottom;
+
 
 
 //    Context context = MyProfileFragment.this;
 
+    /**
+     * MyProfileFragment객체가 단 하나만 존재할 수 있도록 하는 코드(Singleton)
+     */
     private static MyProfileFragment fragment;
-
     public static MyProfileFragment newInstance() {
         
         if(fragment == null){
@@ -40,6 +43,8 @@ public class MyProfileFragment extends Fragment {
 
         return fragment;
     }
+
+
 
     public int show(){
         return timeLineItemAdapter.getCount();
@@ -55,6 +60,9 @@ public class MyProfileFragment extends Fragment {
         name = (TextView)view.findViewById(R.id.name);
         listview =(ListView)view.findViewById(R.id.listview);
         listview.setAdapter(timeLineItemAdapter);
+
+
+
         setListViewHeightBasedOnChildren(listview);
 
 
@@ -68,57 +76,29 @@ public class MyProfileFragment extends Fragment {
         });
 
 
+        //애니메이션 설정을 위한 변수들
+        SlidingAnimationListener listener = new SlidingAnimationListener();
+        translateTop = AnimationUtils.loadAnimation(getContext(), R.anim.translate_top);
+        translateTop.setAnimationListener(listener);
+
+
         return view;
     }
 
-    public void UpdateTimeLineItemAdapter(String message){
-        timeLineItemAdapter.addItem(message);
+    public void AddTimeLineItemAdapter(String message){
+        timeLineItemAdapter.AddItem(message);
         timeLineItemAdapter.notifyDataSetChanged();
-        Log.e("MyProfileFragment","UpdateTimeLineItemAdpater() 호출");
-
 
     }
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
-
-        name = (TextView)findViewById(R.id.name);
 
 
-        ViewGroup think = (ViewGroup)findViewById(R.id.think);
-        think.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyProfileFragment.this, AddTimeLineActivity.class);
-                startActivityForResult(intent, 100);
-            }
-        });
-
-        listview =(ListView)findViewById(R.id.listview);
+    public void DeleteTimeLineItemAdapter(int position){
+        timeLineItemAdapter.DeleteItem(position);
+        timeLineItemAdapter.notifyDataSetChanged();
+    }
 
 
-        listview.setAdapter(timeLineItemAdapter);
-
-
-
-    }*/
-
-
-
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode == RESULT_OK){
-            switch(requestCode){
-                case 100:
-                    timeLineItemAdapter.addItem(data.getExtras().getString("edit_message"));
-                    timeLineItemAdapter.notifyDataSetChanged();
-
-                    setListViewHeightBasedOnChildren(listview);
-            }
-        }
-    }*/
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
@@ -140,5 +120,14 @@ public class MyProfileFragment extends Fragment {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public void AnimationButton(int position){ //부모 액티비티의 버튼의 속성을 invisible로 바꿔보기 위한 함수
+        View deleteSpace = getActivity().findViewById(R.id.delete_space);
+        ((MainActivity)getActivity()).deletePosition = position;
+
+        //버튼을 감싸고 있는 레이아웃이 보이게끔 함
+        deleteSpace.setVisibility(View.VISIBLE);
+        deleteSpace.startAnimation(translateTop);
     }
 }
