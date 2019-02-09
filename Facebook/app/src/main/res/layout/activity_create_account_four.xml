@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="휴대폰 번호를 입력하세요"
+        android:text="휴대폰 번호, 혹은 이메일을 입력하세요"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -23,8 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:ems="10"
-        android:hint="휴대폰 번호"
-        android:inputType="phone" />
+        android:hint="휴대폰 번호 or 이메일"
+        android:inputType="none" />
 
     <ImageButton
         android:id="@+id/next"

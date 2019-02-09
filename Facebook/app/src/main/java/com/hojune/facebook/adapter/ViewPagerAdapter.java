@@ -33,7 +33,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         switch(position){
             case 0:
-                Log.e("getItem", String.valueOf(MyProfileFragment.newInstance().show()));
+                Log.e("getItem", "리스트뷰에 들어있는 아이템 갯수"+String.valueOf(MyProfileFragment.newInstance().show()));
                 return MyProfileFragment.newInstance();
 
             case 1:

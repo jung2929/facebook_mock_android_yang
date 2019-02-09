@@ -47,13 +47,6 @@ public class CreateAccountActivitySix extends AppCompatActivity {
         TextView txId = (TextView)findViewById(R.id.Id);
         TextView txPw = (TextView)findViewById(R.id.Pw);
 
-        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("name", name1+name2);
-        editor.commit();
-
-        Log.e("akfjklasf", pref.getString("name",""));
-
         txId.setText(intent0.getStringExtra("id"));
         txPw.setText(intent0.getStringExtra("pw"));
 
@@ -93,7 +86,7 @@ public class CreateAccountActivitySix extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                Intent intent = new Intent(CreateAccountActivitySix.this, MainActivity.class);
+                                Intent intent = new Intent(CreateAccountActivitySix.this, LoginActivity.class);
                                 startActivity(intent);
                             }
 

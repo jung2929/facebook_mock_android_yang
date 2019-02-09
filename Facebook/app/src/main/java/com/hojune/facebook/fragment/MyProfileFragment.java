@@ -1,14 +1,18 @@
 package com.hojune.facebook.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,9 +24,12 @@ import com.hojune.facebook.custom.SlidingAnimationListener;
 
 public class MyProfileFragment extends Fragment {
 
-    ListView listview;
+    public ListView listview;
     public TimeLineItemAdapter timeLineItemAdapter = new TimeLineItemAdapter();
     TextView name;
+
+
+    MainActivity mainActivity;
 
     Animation translateTop;
     Animation translateBottom;
@@ -57,13 +64,19 @@ public class MyProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_my_profile,container,false);
 
 
+        Button writeProfile = (Button)view.findViewById(R.id.write_profile);
         name = (TextView)view.findViewById(R.id.name);
-        listview =(ListView)view.findViewById(R.id.listview);
+        listview =(ListView)view.findViewById(R.id.fragment_listview);
         listview.setAdapter(timeLineItemAdapter);
 
 
 
+        //왕아아아아아아 미친 이 코드 신의한수
+        mainActivity=(MainActivity)getActivity();
+
+
         setListViewHeightBasedOnChildren(listview);
+        Log.e("onCreateView","리스트뷰 높이조절 직후");
 
 
         ViewGroup think = (ViewGroup)view.findViewById(R.id.think);
@@ -72,6 +85,14 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).CallAddTimeLine();
+            }
+        });
+
+
+        writeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).CallWriteProfile();
             }
         });
 
@@ -85,19 +106,30 @@ public class MyProfileFragment extends Fragment {
         return view;
     }
 
-    public void AddTimeLineItemAdapter(String message){
-        timeLineItemAdapter.AddItem(message);
+
+
+    /**
+     * 이 함수는 MainActivity를 직접 참조하고 있는게 아닐수도 있을것같음..
+     * 뭔가 문제가 생길 느낌이야..
+     */
+    public void ShowOption(){
+        mainActivity.mDialog.show();
+    }
+
+    //여기 지난번에 adapter로 바로 가게 한걸로 기억함
+    public void AddTimeLineItemAdapter(String message, String date, String name){
+        timeLineItemAdapter.AddItem(message, date, name);
         timeLineItemAdapter.notifyDataSetChanged();
+        //mainActivity.refresh();
 
     }
 
 
 
-    public void DeleteTimeLineItemAdapter(int position){
+    /*public void DeleteTimeLineItemAdapter(int position){
         timeLineItemAdapter.DeleteItem(position);
         timeLineItemAdapter.notifyDataSetChanged();
-    }
-
+    }*/
 
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -122,12 +154,12 @@ public class MyProfileFragment extends Fragment {
         listView.requestLayout();
     }
 
-    public void AnimationButton(int position){ //부모 액티비티의 버튼의 속성을 invisible로 바꿔보기 위한 함수
+    /*public void AnimationButton(int position){ //부모 액티비티의 버튼의 속성을 invisible로 바꿔보기 위한 함수
         View deleteSpace = getActivity().findViewById(R.id.delete_space);
         ((MainActivity)getActivity()).deletePosition = position;
 
         //버튼을 감싸고 있는 레이아웃이 보이게끔 함
         deleteSpace.setVisibility(View.VISIBLE);
         deleteSpace.startAnimation(translateTop);
-    }
+    }*/
 }

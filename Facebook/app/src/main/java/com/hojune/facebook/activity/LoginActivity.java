@@ -1,6 +1,8 @@
 package com.hojune.facebook.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity {
 
     Handler mHandler = new Handler();
+    Context mContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         ImageButton ibCreateAccount = (ImageButton)findViewById(R.id.create_account);
         ImageButton ibLogin = (ImageButton) findViewById(R.id.login);
 
-
-
         ibCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,8 +52,15 @@ public class LoginActivity extends AppCompatActivity {
         ibLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectToWonnie connectToWonnie = new ConnectToWonnie();
-                connectToWonnie.Login(etId.getText().toString(), etPw.getText().toString(), new Callback() {
+                final ConnectToWonnie connectToWonnie = new ConnectToWonnie();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("LoginActivity","connectTowonnie.login을 쓰레드로 start");
+                        connectToWonnie.Login(etId.getText().toString(), etPw.getText().toString(),mContext);
+                    }
+                }).start();
+                        /*new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Log.e("LoginActivity onFailure", "서버연결 실패");
@@ -62,12 +70,9 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(Call call, Response response) throws IOException {
                         Log.e("LoginActivity Response", "서버연결 성공");
 
-                        //워니 서버수정 완료하면 이 부분 활성화 시키자
-                        /*try {
+                        try {
                            final JSONObject jsonObject = new JSONObject(response.body().string());
-
-
-                            Log.e("LoginActivity Response", jsonObject.getString("message"));
+                           Log.e("LoginActivity Response", jsonObject.getString("message"));
 
                             //서버에서 로그인 성공이라는 json형식의 값이 오면 로그인 성공이라는 메시지 띄워주고 내 프로필로 이동
                             if(jsonObject.getString("isSuccess")=="true"){
@@ -80,14 +85,20 @@ public class LoginActivity extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
                                     }
-                                });*/
-                        Log.e("LoginActivity Response", "새로운 페이지 시작 직전");
+                                });
+
+                                //jwt값 db에 저장하기
+                                Log.e("LoginActivity",jsonObject.getJSONObject("data").getString("jwt"));
+                                SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("jwt",jsonObject.getJSONObject("data").getString("jwt"));
+                                editor.commit();
+
+                                Log.e("pref값 가져오기", pref.getString("jwt","emety"));
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                     }
-
-                    //
-                            /*else{
+                            else{
                                 mHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -105,21 +116,10 @@ public class LoginActivity extends AppCompatActivity {
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
-                        }*/
+                        }
 
-//
-//                    }
-//                });
-                    //내가 여기서 callback 객체를 파라미터로 넘겨주는것과 thread.sleep을 해서 하는것의 차이를 명확히 알아보자..
-
-
-                    //바로 if문으로 넘어가니까 login.success가 true로 바뀌기도 전에 if문 실행함
-                    //그래서 1초 텀을 줬더니 내 의도대로 잘 됨.
-
-//
-//            }
-//        });
-                });
+                }
+              });*/
             }
         });
     }

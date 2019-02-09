@@ -1,22 +1,13 @@
 package com.hojune.facebook.adapter;
 
 import android.content.Context;
-import android.media.Image;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hojune.facebook.R;
 import com.hojune.facebook.fragment.MyProfileFragment;
@@ -60,8 +51,9 @@ public class TimeLineItemAdapter extends BaseAdapter {
 
 
         TextView message = (TextView)convertView.findViewById(R.id.message);
-        TextView time = (TextView)convertView.findViewById(R.id.time);
-        ImageView ivDelete = (ImageView)convertView.findViewById(R.id.ivDelete);
+        TextView date = (TextView)convertView.findViewById(R.id.date);
+        TextView name = (TextView)convertView.findViewById(R.id.name);
+        ImageView ivOption = (ImageView)convertView.findViewById(R.id.iv_option);
 
 
         //리스트뷰에 가장 최신으로 적은 글이 가장 윗부분으로 올라오게 하기위함
@@ -73,18 +65,19 @@ public class TimeLineItemAdapter extends BaseAdapter {
 
 
 
+        name.setText(myTimeLineData.getName());
+        date.setText(myTimeLineData.getDate());
         message.setText(myTimeLineData.getMessage());
-        time.setText(myTimeLineData.getTime());
+
 
 
         Log.e("TimeLineItemAdapter", "getView");
 
-        ivDelete.setOnClickListener(new View.OnClickListener() {
+        ivOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 MyProfileFragment myProfileFragment = MyProfileFragment.newInstance();
-                myProfileFragment.AnimationButton(myTimeLineData.getPosition());
+                myProfileFragment.ShowOption();
             }
         });
 
@@ -93,14 +86,14 @@ public class TimeLineItemAdapter extends BaseAdapter {
 
 
 
-    public void AddItem(String message){
+    public void AddItem(String message, String date, String name){
         MyTimeLineData data = new MyTimeLineData();
 
         data.setMessage(message);
-        data.setTime();
+        data.setDate(date);
+        data.setName(name);
 
         arrayList.add(data);
-        notifyDataSetChanged();
     }
 
     public void DeleteItem(int position){
@@ -108,5 +101,10 @@ public class TimeLineItemAdapter extends BaseAdapter {
         Log.e("TimeLineItemAdapter","DeleteItem() 호출, position 값 : "+position);
         arrayList.remove(position);
         notifyDataSetChanged();
+    }
+
+    public void DeleteAll(){
+        arrayList.clear();
+        //notifyDataSetChanged();
     }
 }

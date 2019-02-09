@@ -25,11 +25,14 @@
         <activity
             android:name=".activity.CreateAccountActivitySix"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <!--<activity android:name=".fragment.MyProfileFragment" />-->
+        <!-- <activity android:name=".fragment.MyProfileFragment" /> -->
         <activity android:name=".activity.AddTimeLineActivity" />
         <activity android:name=".activity.CreateAccountActivityFive" />
-        <!--<activity android:name=".fragment.TimeLineFragment" />-->
-        <activity android:name=".activity.MainActivity"></activity>
+        <!-- <activity android:name=".fragment.TimeLineFragment" /> -->
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.FindFriend" />
+        <activity android:name=".activity.WriteProfileActivity" />
+        <activity android:name=".activity.FriendProfileActivity"></activity>
     </application>
 
 </manifest>

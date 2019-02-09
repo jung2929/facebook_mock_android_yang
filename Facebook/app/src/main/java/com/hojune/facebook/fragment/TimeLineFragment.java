@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.hojune.facebook.R;
 import com.hojune.facebook.activity.AddTimeLineActivity;
@@ -31,10 +32,11 @@ public class TimeLineFragment extends Fragment {
 
         ViewGroup think = (ViewGroup)view.findViewById(R.id.think);
 
+
         think.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).CallAddTimeLine();
+            ((MainActivity)getActivity()).CallAddTimeLine();
             }
         });
 
