@@ -43,7 +43,7 @@ public class TimeLineItemAdapter extends BaseAdapter {
 
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.activity_my_profile_timeline,parent,false);
+            convertView = inflater.inflate(R.layout.activity_my_profile_timeline_item,parent,false);
         }
 
         //리스트뷰 아이템이 activity_my_profile에 있는 레이아웃을 참조해서, 그 레이아웃에 애니메이션 효과를 주기 위한 코드

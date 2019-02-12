@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -83,8 +84,12 @@ public class FindFriend extends AppCompatActivity {
                                     try{
 
                                         final JSONObject jsonObject = new JSONObject(response.body().string());
-                                        Log.e("FindFriend",String.valueOf(jsonObject.getJSONArray("data").length()));
+                                        //Log.e("FindFriend",String.valueOf(jsonObject.getJSONArray("data").length()));
+                                        //final JSONArray jsonArray = new JSONArray(response.body().string());
+                                        //Log.e("FindFriend",String.valueOf(jsonArray.length()));
+
                                         for(int i = 0; i<jsonObject.getJSONArray("data").length();i++){
+                                            //String name = jsonArray.getJSONObject(i).getString("userFullname");
                                             String name = jsonObject.getJSONArray("data").getJSONObject(i).getString("userFullname");
                                             findFriendItemAdapter.AddItem(name);
                                         }
@@ -99,13 +104,17 @@ public class FindFriend extends AppCompatActivity {
                                             @Override
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                                 try{
-                                                    final String nickName = jsonObject.getJSONArray("data").getJSONObject(position).getString("userFullname");
+                                                    final int pos = position;
+                                                    //final String userId = jsonArray.getJSONObject(position).getString("user_Id");
+                                                    //Log.e("????????????", jsonArray.getJSONObject(position).getString("user_Id"));
+                                                    //final String userId = jsonArray.getJSONObject(position).getString("user_Id");
+                                                    final String userId = jsonObject.getJSONArray("data").getJSONObject(pos).getString("user_Id");
 
 
-                                                                           /**
-                                                                            *원래는 여기에 사용자 아이디 들어가야하는데 지금 일단 임시로 별명
-                                                                             */
-                                                    connectToWonnie.ReadProfile(name, "hocheol", mContext, new Callback() {
+                                                    /**
+                                                     *원래는 여기에 사용자 아이디 들어가야하는데 지금 일단 임시로 별명
+                                                     */
+                                                    connectToWonnie.ReadProfile(userId, mContext, new Callback() {
                                                         @Override
                                                         public void onFailure(Call call, IOException e) {
 
@@ -114,27 +123,23 @@ public class FindFriend extends AppCompatActivity {
                                                         @Override
                                                         public void onResponse(Call call, Response response) throws IOException {
                                                             try{
-                                                                final JSONObject jsonObject2 = new JSONObject(response.body().string());
-                                                                Log.e("FindFriend",String.valueOf(jsonObject2.getJSONArray("data").length()));
-
-                                                                for(int i = 0; i<jsonObject2.getJSONArray("data").length();i++){
-                                                                    String hometown = jsonObject2.getJSONArray("data").getJSONObject(i).getString("hometown");
-                                                                    Log.e("아아아아아",hometown);
-                                                                }
+                                                                //final JSONArray array = new JSONArray(response.body().string());
+                                                                final JSONObject object = new JSONObject(response.body().string());
+                                                                //Log.e("FindFriend",String.valueOf(jsonObject2.getJSONArray("data").length()));
 
                                                                 /**
                                                                  * 이부분도 말해야해 지금 범위가 ,가 안찍혀있어서 그런지 index 0 으로 접근 불가함
                                                                  * 지금 이 주석 바로 밑에 적은 코드는 임시방편
                                                                  */
-                                                                String userFullname ="hocheolYang";
-                                                                String hometown = "인천";
-                                                                String job = "인천";
-                                                                String nickname ="hocheol";
-                                                                /*String hometown = jsonObject.getJSONArray("data").getJSONObject(0).getString("hometown");
-                                                                String userFullname = jsonObject.getJSONArray("data").getJSONObject(0).getString("userFullname");
-                                                                String job = jsonObject.getJSONArray("data").getJSONObject(0).getString("job");
-                                                                String nickname = jsonObject.getJSONArray("data").getJSONObject(0).getString("userNickname");*/
-                                                                //Log.e("FindFriend","서버에서 불러온 호철이 값"+hometown+job+nickname);
+                                                                /*String userFullname =array.getJSONObject(0).getString("userFullname");
+                                                                String hometown = array.getJSONObject(0).getString("hometown");
+                                                                String job = array.getJSONObject(0).getString("job");
+                                                                String nickname =array.getJSONObject(0).getString("userNickname");*/
+                                                                String hometown = object.getJSONArray("data").getJSONObject(0).getString("hometown");
+                                                                String userFullname = object.getJSONArray("data").getJSONObject(0).getString("userFullname");
+                                                                String job = object.getJSONArray("data").getJSONObject(0).getString("job");
+                                                                String nickname = object.getJSONArray("data").getJSONObject(0).getString("userNickname");
+                                                                Log.e("FindFriend","서버에서 불러온 호철이 값"+hometown+job+nickname);
 
 
                                                                 Intent intent = new Intent(FindFriend.this,FriendProfileActivity.class);
@@ -144,13 +149,13 @@ public class FindFriend extends AppCompatActivity {
                                                                 intent.putExtra("nickname",nickname);
 
                                                                 startActivity(intent);
-                                                            }catch(JSONException e){
+                                                            }catch(Exception e){
                                                                 e.printStackTrace();
                                                             }
                                                         }
                                                     });
                                                 }
-                                                catch(JSONException e){
+                                                catch(Exception e){
                                                     e.printStackTrace();
                                                 }
 

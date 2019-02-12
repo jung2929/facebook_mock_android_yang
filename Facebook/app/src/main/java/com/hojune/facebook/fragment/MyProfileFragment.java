@@ -2,6 +2,8 @@ package com.hojune.facebook.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +31,11 @@ public class MyProfileFragment extends Fragment {
     public TimeLineItemAdapter timeLineItemAdapter = new TimeLineItemAdapter();
     TextView name;
 
+    TextView hometown;
+    TextView job;
+    TextView nickname;
+
+    ImageView friendlist;
 
     MainActivity mainActivity;
 
@@ -57,19 +65,28 @@ public class MyProfileFragment extends Fragment {
         return timeLineItemAdapter.getCount();
     }
 
+    public void SetFunc(String hometown, String job, String nickname){
+        this.hometown.setText(hometown);
+        this.job.setText(job);
+        this.nickname.setText(nickname);
+    }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_my_profile,container,false);
 
+        View view = inflater.inflate(R.layout.activity_my_profile,container,false);
 
         Button writeProfile = (Button)view.findViewById(R.id.write_profile);
         name = (TextView)view.findViewById(R.id.name);
         listview =(ListView)view.findViewById(R.id.fragment_listview);
+        friendlist = (ImageView)view.findViewById(R.id.friendlist);
         listview.setAdapter(timeLineItemAdapter);
 
-
+        hometown =(TextView)view.findViewById(R.id.hometown);
+        job =(TextView)view.findViewById(R.id.job);
+        nickname =(TextView)view.findViewById(R.id.nickname);
 
         //왕아아아아아아 미친 이 코드 신의한수
         mainActivity=(MainActivity)getActivity();
@@ -93,6 +110,13 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).CallWriteProfile();
+            }
+        });
+
+        friendlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).CallFriendList();
             }
         });
 
@@ -126,10 +150,10 @@ public class MyProfileFragment extends Fragment {
 
 
 
-    /*public void DeleteTimeLineItemAdapter(int position){
+    public void DeleteTimeLineItemAdapter(int position){
         timeLineItemAdapter.DeleteItem(position);
         timeLineItemAdapter.notifyDataSetChanged();
-    }*/
+    }
 
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {

@@ -35,11 +35,76 @@ public class ConnectToWonnie {
     public String name;
     boolean success = false; //연결이 잘 되었는지 외부에서 판단할 수 있게 해주는 boolean 변수
 
-    public void ReadProfile(String userFullname, String userNickname, Context context, Callback callback){
+    public void FriendList(Context context, Callback callback){
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
                 .host("jiwondomain.com")
-                .addPathSegment("profile")
+                .addPathSegment("friend")
+                .build();
+
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        jwt = pref.getString("j`wt","emety");
+        Log.e("친구추가할때의 jwt", jwt);
+
+        JSONObject jsonInput = new JSONObject();
+
+        /*try{
+            jsonInput.put("friendName",friendName);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }*/
+
+        RequestBody reqBody = RequestBody.create(
+                MediaType.parse("application/json; charset=utf-8"),
+                jsonInput.toString()
+        );
+
+        Request request = new Request.Builder()
+                .addHeader("x-access-token",jwt)
+                .url(httpUrl)
+                //.post(reqBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void AddFriend(String friendName, Context context, Callback callback){
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host("jiwondomain.com")
+                .addPathSegment("friend")
+                .build();
+
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        jwt = pref.getString("jwt","emety");
+        Log.e("친구추가할때의 jwt", jwt);
+
+        JSONObject jsonInput = new JSONObject();
+
+        try{
+            jsonInput.put("friendName",friendName);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        RequestBody reqBody = RequestBody.create(
+                MediaType.parse("application/json; charset=utf-8"),
+                jsonInput.toString()
+        );
+
+        Request request = new Request.Builder()
+                .addHeader("x-access-token",jwt)
+                .url(httpUrl)
+                .post(reqBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+    public void ReadProfile(String userId, Context context, Callback callback){
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host("jiwondomain.com")
+                .addPathSegment("profile/"+userId)
                 .build();
 
         SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
@@ -47,13 +112,6 @@ public class ConnectToWonnie {
         Log.e("프로필 읽을때의 jwt", jwt);
 
         JSONObject jsonInput = new JSONObject();
-
-        try{
-            jsonInput.put("hometown",userFullname);
-            jsonInput.put("userNickname",userNickname);
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
 
         RequestBody reqBody = RequestBody.create(
                 MediaType.parse("application/json; charset=utf-8"),

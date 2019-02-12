@@ -1,18 +1,14 @@
 package com.hojune.facebook.fragment;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.hojune.facebook.R;
-import com.hojune.facebook.activity.AddTimeLineActivity;
 import com.hojune.facebook.activity.MainActivity;
 
 public class TimeLineFragment extends Fragment {

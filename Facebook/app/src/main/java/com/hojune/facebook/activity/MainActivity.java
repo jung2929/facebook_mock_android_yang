@@ -129,15 +129,9 @@ public class MainActivity extends AppCompatActivity {
         //translateBottom.setAnimationListener(listener);
 
         createDialog();
-        mDialog.show();
+        //mDialog.show();
 
-       /* btDelete = (Button)findViewById(R.id.delete_button);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myProfileFragment.timeLineItemAdapter.DeleteItem(deletePosition);
-            }
-        });*/
+
 
 
 
@@ -252,15 +246,24 @@ public class MainActivity extends AppCompatActivity {
        startActivityForResult(intent,500);
    }
 
+   public void CallFriendList(){
+       Intent intent = new Intent(this, FriendListActivity.class);
+       startActivity(intent);
+   }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /*if(resultCode != RESULT_CANCELED){
+        if(resultCode != RESULT_CANCELED){
             if (requestCode == 500) {
-                tvHometown.setText(data.getStringExtra("home"));
+                String a = data.getStringExtra("home");
+                String b = data.getStringExtra("job");
+                String c = data.getStringExtra("nickname");
+                myProfileFragment.SetFunc(a,b,c);
+                /*tvHometown.setText(data.getStringExtra("home"));
                 tvJob.setText(data.getStringExtra("job").toString());
-                tvNickname.setText(data.getStringExtra("nickname").toString());
+                tvNickname.setText(data.getStringExtra("nickname").toString());*/
             }
-        }*/
+        }
         //아하 저 3개의 텍스트는 mainactivity에 있는게아니라 fragment에 있는것임
     }
 
@@ -344,6 +347,14 @@ public class MainActivity extends AppCompatActivity {
         mDialog.addContentView(zoomDiaglogView, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
         mDialog.getWindow().setGravity(Gravity.BOTTOM);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        btDelete = (Button)zoomDiaglogView.findViewById(R.id.delete_button);
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myProfileFragment.timeLineItemAdapter.DeleteItem(deletePosition);
+            }
+        });
 
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

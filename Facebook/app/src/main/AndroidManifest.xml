@@ -3,6 +3,10 @@
     package="com.hojune.facebook">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--안드로이드 sd카드만을 의미하는것이 아님, 내장메모리중 개발자가 접근할 수 있는 영역도 외장메모리라고함 -->
+
+    <uses-feature android:name="android.hardware.camera2"/>
 
     <application
         android:allowBackup="true"
@@ -32,7 +36,8 @@
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.FindFriend" />
         <activity android:name=".activity.WriteProfileActivity" />
-        <activity android:name=".activity.FriendProfileActivity"></activity>
+        <activity android:name=".activity.FriendProfileActivity" />
+        <activity android:name=".activity.FriendListActivity"></activity>
     </application>
 
 </manifest>
