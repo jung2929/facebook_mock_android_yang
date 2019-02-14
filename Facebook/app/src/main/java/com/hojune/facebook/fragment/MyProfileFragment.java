@@ -26,7 +26,6 @@ import com.hojune.facebook.R;
 import com.hojune.facebook.custom.SlidingAnimationListener;
 
 public class MyProfileFragment extends Fragment {
-
     public ListView listview;
     public TimeLineItemAdapter timeLineItemAdapter = new TimeLineItemAdapter();
     TextView name;
@@ -91,6 +90,13 @@ public class MyProfileFragment extends Fragment {
         //왕아아아아아아 미친 이 코드 신의한수
         mainActivity=(MainActivity)getActivity();
 
+        //로그인 한 직후에 setListview함수가 내가 원하는 타이밍에 호출되게하기 위함
+        //이렇게 안하면 로그인하고 아이템이 추가되기도 전에 이 함수를 호출해버려서 높이조절이 안되는듯??
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         setListViewHeightBasedOnChildren(listview);
         Log.e("onCreateView","리스트뷰 높이조절 직후");
@@ -126,7 +132,6 @@ public class MyProfileFragment extends Fragment {
         translateTop = AnimationUtils.loadAnimation(getContext(), R.anim.translate_top);
         translateTop.setAnimationListener(listener);
 
-
         return view;
     }
 
@@ -136,13 +141,17 @@ public class MyProfileFragment extends Fragment {
      * 이 함수는 MainActivity를 직접 참조하고 있는게 아닐수도 있을것같음..
      * 뭔가 문제가 생길 느낌이야..
      */
-    public void ShowOption(){
-        mainActivity.mDialog.show();
+
+    //여기서의 number는 TimeLineItemAdapter함수에서 내가 클릭한 아이템이 가지고 있는 게시글 정보임
+    public void ShowOption(int number){
+        mainActivity.mSweetSheet.toggle();
+        mainActivity.deleteNumber = number;
+        Log.e("ShowOption","deleteNumber = "+mainActivity.deleteNumber);
     }
 
     //여기 지난번에 adapter로 바로 가게 한걸로 기억함
     public void AddTimeLineItemAdapter(String message, String date, String name){
-        timeLineItemAdapter.AddItem(message, date, name);
+        //timeLineItemAdapter.AddItem(message, date, name);
         timeLineItemAdapter.notifyDataSetChanged();
         //mainActivity.refresh();
 

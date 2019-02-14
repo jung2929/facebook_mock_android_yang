@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.hojune.facebook.activity.FindFriend;
+import com.hojune.facebook.activity.FriendProfileActivity;
 import com.hojune.facebook.activity.LoginActivity;
 import com.hojune.facebook.activity.MainActivity;
 import com.hojune.facebook.fragment.MyProfileFragment;
@@ -34,6 +36,26 @@ public class ConnectToWonnie {
     public String message;
     public String name;
     boolean success = false; //연결이 잘 되었는지 외부에서 판단할 수 있게 해주는 boolean 변수
+
+    public void DeleteTimeline(int number, Context context, Callback callback){
+        HttpUrl httpUrl = new HttpUrl.Builder()
+                .scheme("http")
+                .host("jiwondomain.com")
+                .addPathSegment("timeline/"+number)
+                .build();
+
+        SharedPreferences pref = context.getSharedPreferences("pref", MODE_PRIVATE);
+        jwt = pref.getString("jwt","empty");
+
+        Request request = new Request.Builder()
+                .addHeader("x-access-token",jwt)
+                .url(httpUrl)
+                .delete()
+                //.post(reqBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
 
     public void FriendList(Context context, Callback callback){
         HttpUrl httpUrl = new HttpUrl.Builder()
@@ -100,6 +122,7 @@ public class ConnectToWonnie {
 
         client.newCall(request).enqueue(callback);
     }
+
     public void ReadProfile(String userId, Context context, Callback callback){
         HttpUrl httpUrl = new HttpUrl.Builder()
                 .scheme("http")
@@ -329,9 +352,54 @@ public class ConnectToWonnie {
             editor.putString("jwt",jsonObject.getJSONObject("data").getString("jwt"));
             editor.commit();
 
+            Log.e("userId값 변경완료",pref.getString("userId","empty"));
             Log.e("pref값 변경완료", pref.getString("jwt","emety"));
-            Intent intent = new Intent(context, MainActivity.class);
-            context.startActivity(intent);
+
+            //로그인버튼을 누르면 이 Login함수로 오게되는데 이때의 Login함수 내에서 preference의 id값을 저장 후 ReadProfile함수를 호출해서
+            //내 프로필 정보를 얻고 onResponse에서 내 프로필 액티비티를 호출해서 내 정보가 띄워지게 함
+
+            //워니가 null로 반환하게 하면 jsonarray 에러 안날거니까 이 세줄 지우고 아랫부분 활성화시키자
+
+            Intent intent = new Intent(MyApplication.getAppContext(),MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            MyApplication.getAppContext().startActivity(intent);
+            /*ReadProfile(pref.getString("userId", "empty"), MyApplication.getAppContext(), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        String userFullname = jsonObject.getJSONArray("data").getJSONObject(0).getString("userFullname");
+                        String hometown = jsonObject.getJSONArray("data").getJSONObject(0).getString("hometown");
+                        String job = jsonObject.getJSONArray("data").getJSONObject(0).getString("job");
+                        String nickname = jsonObject.getJSONArray("data").getJSONObject(0).getString("userNickname");
+                        Log.e("Login function","불러온 값 : "+hometown+job+nickname);
+
+                        Intent intent = new Intent(MyApplication.getAppContext(), MainActivity.class);
+                        //에러나서 이거 넣으라고 해서 넣었음.. 이거때문에 뭔 에러 유발될수도??
+                        //
+                        //
+                        //
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //
+
+
+                        intent.putExtra("userFullname",userFullname);
+                        intent.putExtra("hometown",hometown);
+                        intent.putExtra("job",job);
+                        intent.putExtra("nickname",nickname);
+                        MyApplication.getAppContext().startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            });*/
         }
         catch(IOException e){
             e.printStackTrace();

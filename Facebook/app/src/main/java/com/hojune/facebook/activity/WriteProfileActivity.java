@@ -43,7 +43,7 @@ public class WriteProfileActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                connectToWonnie.WriteProfile(etHometown.getText().toString(), etHometown.getText().toString(), etNickname.getText().toString(), mContext, new Callback() {
+                connectToWonnie.WriteProfile(etHometown.getText().toString(), etJob.getText().toString(), etNickname.getText().toString(), mContext, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
 

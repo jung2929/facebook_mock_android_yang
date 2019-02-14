@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -38,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         final EditText etId = (EditText)findViewById(R.id.id);
         final EditText etPw = (EditText)findViewById(R.id.pw);
 
-        ImageButton ibCreateAccount = (ImageButton)findViewById(R.id.create_account);
-        ImageButton ibLogin = (ImageButton) findViewById(R.id.login);
+        Button ibCreateAccount = (Button)findViewById(R.id.create_account);
+        Button ibLogin = (Button) findViewById(R.id.login);
 
         ibCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         ibLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("userId",etId.getText().toString());
+                editor.commit();
                 final ConnectToWonnie connectToWonnie = new ConnectToWonnie();
                 new Thread(new Runnable() {
                     @Override

@@ -21,18 +21,16 @@
             <ImageView
                 android:id="@+id/profile_background"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#232937" />
+                android:layout_height="300dp"
+                android:background="@drawable/bbb" />
 
-            <com.hojune.facebook.custom.CircleImageView
+            <ImageView
                 android:id="@+id/profile"
                 android:layout_width="260dp"
                 android:layout_height="260dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="80dp"
-                android:src="@drawable/e"
-                app:civ_border_color="#FFFFFFFF"
-                app:civ_border_width="6dp" />
+                android:src="@drawable/abc" />
 
             <ImageView
                 android:layout_gravity="center_horizontal"
@@ -153,21 +151,23 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="20dp"
                     android:id="@+id/think"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <com.hojune.facebook.custom.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <ImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/e" />
+                        android:src="@drawable/abc" />
 
                     <ImageView
                         android:id="@+id/imageView"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:layout_marginBottom="20dp"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/g" />
 

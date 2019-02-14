@@ -29,6 +29,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,12 +40,17 @@ import com.hojune.facebook.R;
 import com.hojune.facebook.adapter.TimeLineItemAdapter;
 import com.hojune.facebook.adapter.ViewPagerAdapter;
 import com.hojune.facebook.fragment.MyProfileFragment;
+import com.mingle.entity.MenuEntity;
+import com.mingle.sweetpick.BlurEffect;
+import com.mingle.sweetpick.RecyclerViewDelegate;
+import com.mingle.sweetpick.SweetSheet;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -66,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
         return mainActivity;
     }*/
+
+    FrameLayout fl;
+    public SweetSheet mSweetSheet = new SweetSheet(fl);
+
+    public int deleteNumber;
 
     Handler mHandler = new Handler();
 
@@ -110,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fl = (FrameLayout) findViewById(R.id.fl);
+        setupRecyclerView();
 
         myProfileFragment.timeLineItemAdapter.DeleteAll();
 
@@ -167,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
                         String message = jsonObject.getJSONArray("data").getJSONObject(i).getString("content");
                         String date = jsonObject.getJSONArray("data").getJSONObject(i).getString("date");
                         String name = jsonObject.getJSONArray("data").getJSONObject(i).getString("name");
-                        myProfileFragment.timeLineItemAdapter.AddItem(message, date, name);
+                        int number = Integer.parseInt(jsonObject.getJSONArray("data").getJSONObject(i).getString("number"));
+                        myProfileFragment.timeLineItemAdapter.AddItem(message, date, name, number);
                     }
                 }
                 catch(JSONException e){
@@ -178,6 +193,105 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void setupRecyclerView() {
+
+        final ArrayList<MenuEntity> list = new ArrayList<>();
+        //添加假数据
+        MenuEntity menuEntity1 = new MenuEntity();
+        menuEntity1.iconId = R.drawable.trash;
+        //menuEntity1.titleColor = 0xff000000;
+        menuEntity1.title = "삭제하기";
+        MenuEntity menuEntity2 = new MenuEntity();
+        menuEntity2.iconId = R.drawable.x;
+        //menuEntity.titleColor = 0xffb3b3b3;
+        menuEntity2.title = "게시물 숨기기";
+        list.add(menuEntity1);
+        list.add(menuEntity2);
+        // SweetSheet 控件,根据 rl 确认位置
+        mSweetSheet = new SweetSheet(fl);
+
+        //设置数据源 (数据源支持设置 list 数组,也支持从菜单中获取)
+        mSweetSheet.setMenuList(list);
+        //根据设置不同的 Delegate 来显示不同的风格.
+        mSweetSheet.setDelegate(new RecyclerViewDelegate(true));
+        //根据设置不同Effect 来显示背景效果BlurEffect:模糊效果.DimEffect 变暗效果
+        mSweetSheet.setBackgroundEffect(new BlurEffect(8));
+        //设置点击事件
+        mSweetSheet.setOnMenuItemClickListener(new SweetSheet.OnMenuItemClickListener() {
+            @Override
+            public boolean onItemClick(int position, MenuEntity menuEntity1) {
+                connectToWonnie.DeleteTimeline(deleteNumber, mContext, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response.body().string());
+                            final String message = jsonObject.getString("message");
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            /**
+                             * 아 여길 어떻게 하지.... 화면갱신인 부분인데
+                             */
+                                    connectToWonnie.MyTimeLine(mContext, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            try {
+                                                JSONObject jsonObject = new JSONObject(response.body().string());
+
+                                                for (int i = 0; i < jsonObject.getJSONArray("data").length(); i++) {
+                                                    final String message = jsonObject.getJSONArray("data").getJSONObject(i).getString("content");
+                                                    final String date = jsonObject.getJSONArray("data").getJSONObject(i).getString("date");
+                                                    final String name = jsonObject.getJSONArray("data").getJSONObject(i).getString("name");
+                                                    final int number = Integer.parseInt(jsonObject.getJSONArray("data").getJSONObject(i).getString("number"));
+                                                    myProfileFragment.timeLineItemAdapter.AddItem(message, date, name, number);
+                                                }
+                                                mHandler.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        myProfileFragment.timeLineItemAdapter.notifyDataSetChanged();
+                                                    }
+                                                });
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            //여기서 리스트뷰 높이 조절하는 함수를 호출했더니 getview가 두배로 더 호출됨.. 흠..
+                                            //일단 내가 우려했던 문제는 해결완료..
+                                            //높이를 2분의1로 줄여볼까 증가하는..
+                                            mHandler.post(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    MyProfileFragment.setListViewHeightBasedOnChildren(myProfileFragment.listview);
+                                                    viewPagerAdapter.notifyDataSetChanged();
+                                                    mSweetSheet.dismiss();
+                                                }
+                                            });
+                                        }
+                                    });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return false;
+            }
+        });
     }
 
     public void refresh(){

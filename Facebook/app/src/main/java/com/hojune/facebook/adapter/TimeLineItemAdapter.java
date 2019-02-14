@@ -76,8 +76,9 @@ public class TimeLineItemAdapter extends BaseAdapter {
         ivOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int number = arrayList.get(arrayList.size()-1-pos).getNumber();
                 MyProfileFragment myProfileFragment = MyProfileFragment.newInstance();
-                myProfileFragment.ShowOption();
+                myProfileFragment.ShowOption(number);
             }
         });
 
@@ -86,9 +87,10 @@ public class TimeLineItemAdapter extends BaseAdapter {
 
 
 
-    public void AddItem(String message, String date, String name){
+    public void AddItem(String message, String date, String name, int number){
         MyTimeLineData data = new MyTimeLineData();
 
+        data.setNumber(number);
         data.setMessage(message);
         data.setDate(date);
         data.setName(name);

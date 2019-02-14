@@ -7,8 +7,16 @@ public class MyTimeLineData {
     private String message;
     private String date;
     private String name;
-
+    private int number;
     private int position;
+
+    public void setNumber(int number){
+        this.number = number;
+    }
+
+    public int getNumber(){
+        return number;
+    }
 
     public void setName(String name){
         this.name = name;
